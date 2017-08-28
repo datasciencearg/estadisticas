@@ -1,6 +1,7 @@
 function ViewModel()
 {
     var self = this;
+    var idPlanillaGoogleDrive = "1yAF4OQ1EDY48OKdgicAFRF-0T7H36ZoAfOKRgjZqZQA";
     
     self.format = function(v)
     {
@@ -59,13 +60,14 @@ function ViewModel()
     };
     
     $.ajax({
-        url: 'https://spreadsheets.google.com/feeds/list/1yAF4OQ1EDY48OKdgicAFRF-0T7H36ZoAfOKRgjZqZQA/od6/public/values?alt=json',
+        url: 'https://spreadsheets.google.com/feeds/list/' + idPlanillaGoogleDrive + '/od6/public/values?alt=json',
         success: function(result)
         {
             self.cargarValoresAMostrar(_.map(result.feed.entry, mapGD));
         }
     });
     
+    self.enlaceGoogleDrive = "https://docs.google.com/spreadsheets/d/" + idPlanillaGoogleDrive + "/edit?usp=drive_web";
     return self;
 }
 
