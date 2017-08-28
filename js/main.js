@@ -1,34 +1,5 @@
 function ViewModel()
 {
-    // Fuente: https://www.pagina12.com.ar/45122-la-deuda-eterna (19/06/2017)
-    // El gobierno de Macri ya emitió deuda por casi 100 mil millones
-    // de dólares en casi veinte meses de gestión, superando el ritmo
-    // de endeudamiento de la dictadura militar.
-    var data = [{ 
-                    ValorInicialMedido: 100000000000,
-                    ValorPorMilisegundo: 1.9290123456790123, // SE CALCULA ASI: 100000000000 / (20 * 30 * 24 * 60 * 60 * 1000)
-                    FechaUltimaMedicion: "19/06/2017",
-                    Titulo: "Deuda Externa",
-                    Class: "warning",
-                    Unidad: "U$S"
-                },
-                {                                      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    ValorInicialMedido: 10000000000,   // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    ValorPorMilisegundo: 1.003,        // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    FechaUltimaMedicion: "23/01/2017", // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    Titulo: "Fuga de Capitales",       // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    Class: "danger",                   // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    Unidad: "U$S"                      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                },                                     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                {                                      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    ValorInicialMedido: 413131330,     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    ValorPorMilisegundo: -0.00001,     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    FechaUltimaMedicion: "12/11/2016", // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    Titulo: "Gasto Público",           // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    Class: "success",                  // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    Unidad: "$"                        // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                }];
-
     var self = this;
     
     self.format = function(v)
@@ -74,7 +45,25 @@ function ViewModel()
         }));
     }, 100);
     
-    self.cargarValoresAMostrar(data);
+    var mapGD = function(entry)
+    {
+        return {                                      
+                    ValorInicialMedido  : parseFloat(entry.gsx$valorinicialmedido.$t.replace(",",".")),    
+                    ValorPorMilisegundo : parseFloat(entry.gsx$valorpormilisegundo.$t.replace(",",".")),    
+                    FechaUltimaMedicion : entry.gsx$fechaultimamedicion.$t,
+                    Titulo              : entry.gsx$titulo.$t,
+                    Class               : entry.gsx$class.$t,   
+                    Unidad              : entry.gsx$unidad.$t,
+                };
+    };
+    
+    $.ajax({
+        url: 'https://spreadsheets.google.com/feeds/list/1yAF4OQ1EDY48OKdgicAFRF-0T7H36ZoAfOKRgjZqZQA/od6/public/values?alt=json',
+        success: function(result)
+        {
+            self.cargarValoresAMostrar(_.map(result.feed.entry, mapGD));
+        }
+    });
     
     return self;
 }
