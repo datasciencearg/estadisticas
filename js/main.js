@@ -54,6 +54,7 @@ function ViewModel()
                     Titulo              : entry.gsx$titulo.$t,
                     Class               : entry.gsx$class.$t,   
                     Unidad              : entry.gsx$unidad.$t,
+                    Fuente              : entry.gsx$fuente.$t
                 };
     };
     
