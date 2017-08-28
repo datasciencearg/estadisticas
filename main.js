@@ -4,10 +4,35 @@ function ViewModel()
     // El gobierno de Macri ya emitió deuda por casi 100 mil millones
     // de dólares en casi veinte meses de gestión, superando el ritmo
     // de endeudamiento de la dictadura militar.
-    
-    var valorDeudaExterna = 100000000000;
-    var valorPorMilisegundo = valorDeudaExterna / (20 * 30 * 24 * 60 * 60 * 1000); 
-    var fechaUltimoDato = "19/06/2017";
+     
+    var data = [{ 
+                    ValorInicialMedido: 100000000000,
+                    ValorPorMilisegundo: (function()
+                    {
+                        return 100000000000 / (20 * 30 * 24 * 60 * 60 * 1000);
+                    })(),
+                    FechaUltimaMedicion: "19/06/2017",
+                    Titulo: "Deuda Externa",
+                    Class: "warning",
+                    Unidad: "U$S"
+                },
+                {                                      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    ValorInicialMedido: 10000000000,   // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    ValorPorMilisegundo: 1.003,        // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    FechaUltimaMedicion: "23/01/2017", // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    Titulo: "Fuga de Capitales",       // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    Class: "danger",                   // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    Unidad: "U$S"                      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                },                                     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                {                                      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    ValorInicialMedido: 413131330,     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    ValorPorMilisegundo: -0.0001,      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    FechaUltimaMedicion: "12/11/2016", // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    Titulo: "Gasto Público",           // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    Class: "success",                  // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    Unidad: "$"                        // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                }];
+
     var self = this;
     
     self.format = function(v)
@@ -25,18 +50,27 @@ function ViewModel()
         j = (j = i.length) > 3 ? j % 3 : 0;
         return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
     };
+    
     var fechaActual = moment();
-    var fechaUltimoDatoMoment = moment(fechaUltimoDato, 'DD/MM/YYYY');
-    var diferencia = fechaActual.diff(fechaUltimoDatoMoment);
-    var valorDeudaExternaMilisegundos = moment.duration(diferencia).asMilliseconds();
-    self.DeudaExterna  = ko.observable(self.format(valorDeudaExterna + valorDeudaExternaMilisegundos * valorPorMilisegundo));
-    self.FugaCapitales = ko.observable(2);
-    self.GastoPublico  = ko.observable(3);
+    
+    self.valoresAMostrar = ko.observableArray(_.map(data, function(i)
+    {    
+        var fechaUltimaMedicionMoment = moment(i.FechaUltimaMedicion, 'DD/MM/YYYY');
+        var diferencia = fechaActual.diff(fechaUltimaMedicionMoment);
+        var cantidadMilisegundos = moment.duration(diferencia).asMilliseconds();
+        i.Valor = ko.observable(self.format(i.ValorInicialMedido + cantidadMilisegundos * i.ValorPorMilisegundo));
+        return i;
+    }));
     
     setInterval(function()
     {
-        var valorFinal = parseFloat(self.DeudaExterna().toString().replace(/\./g,"").replace(",",".")) + (valorPorMilisegundo * 100);
-        self.DeudaExterna(self.format(valorFinal));
+        var v = self.valoresAMostrar();
+        self.valoresAMostrar(_.map(v, function(i)
+        {
+            var valorFinal = parseFloat(i.Valor().toString().replace(/\./g,"").replace(",",".")) + (i.ValorPorMilisegundo * 100);
+            i.Valor(self.format(valorFinal));
+            return i;
+        }));
     }, 100);
     
     return self;
