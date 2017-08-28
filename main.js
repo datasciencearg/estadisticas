@@ -4,13 +4,9 @@ function ViewModel()
     // El gobierno de Macri ya emitió deuda por casi 100 mil millones
     // de dólares en casi veinte meses de gestión, superando el ritmo
     // de endeudamiento de la dictadura militar.
-     
     var data = [{ 
                     ValorInicialMedido: 100000000000,
-                    ValorPorMilisegundo: (function()
-                    {
-                        return 100000000000 / (20 * 30 * 24 * 60 * 60 * 1000);
-                    })(),
+                    ValorPorMilisegundo: 1.9290123456790123, // SE CALCULA ASI: 100000000000 / (20 * 30 * 24 * 60 * 60 * 1000)
                     FechaUltimaMedicion: "19/06/2017",
                     Titulo: "Deuda Externa",
                     Class: "warning",
@@ -26,7 +22,7 @@ function ViewModel()
                 },                                     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
                 {                                      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
                     ValorInicialMedido: 413131330,     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
-                    ValorPorMilisegundo: -0.0001,      // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
+                    ValorPorMilisegundo: -0.00001,     // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
                     FechaUltimaMedicion: "12/11/2016", // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
                     Titulo: "Gasto Público",           // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
                     Class: "success",                  // DATOS DUMMY, BUSCAR LOS DATOS VERDADEROS
@@ -75,7 +71,6 @@ function ViewModel()
     
     return self;
 }
-
 
 $(document).ready(function()
 {
