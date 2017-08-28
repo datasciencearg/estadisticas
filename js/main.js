@@ -49,14 +49,19 @@ function ViewModel()
     
     var fechaActual = moment();
     
-    self.valoresAMostrar = ko.observableArray(_.map(data, function(i)
-    {    
-        var fechaUltimaMedicionMoment = moment(i.FechaUltimaMedicion, 'DD/MM/YYYY');
-        var diferencia = fechaActual.diff(fechaUltimaMedicionMoment);
-        var cantidadMilisegundos = moment.duration(diferencia).asMilliseconds();
-        i.Valor = ko.observable(self.format(i.ValorInicialMedido + cantidadMilisegundos * i.ValorPorMilisegundo));
-        return i;
-    }));
+    self.valoresAMostrar = ko.observableArray();
+    
+    self.cargarValoresAMostrar = function(data)
+    {
+        self.valoresAMostrar(_.map(data, function(i)
+        {    
+            var fechaUltimaMedicionMoment = moment(i.FechaUltimaMedicion, 'DD/MM/YYYY');
+            var diferencia = fechaActual.diff(fechaUltimaMedicionMoment);
+            var cantidadMilisegundos = moment.duration(diferencia).asMilliseconds();
+            i.Valor = ko.observable(self.format(i.ValorInicialMedido + cantidadMilisegundos * i.ValorPorMilisegundo));
+            return i;
+        }));        
+    };
     
     setInterval(function()
     {
@@ -68,6 +73,8 @@ function ViewModel()
             return i;
         }));
     }, 100);
+    
+    self.cargarValoresAMostrar(data);
     
     return self;
 }
