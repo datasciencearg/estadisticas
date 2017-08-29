@@ -48,6 +48,8 @@ function ViewModel()
     
     var mapGD = function(entry)
     {
+        var fuenteSplit = entry.gsx$fuente.$t.split("::");
+        var fuente = fuenteSplit.length > 1 ? { Titulo: fuenteSplit[0], Url: fuenteSplit[1] } : { Titulo: entry.gsx$fuente.$t, Url: entry.gsx$fuente.$t };
         return {                                      
                     ValorInicialMedido  : parseFloat(entry.gsx$valorinicialmedido.$t.replace(",",".")),    
                     ValorPorMilisegundo : parseFloat(entry.gsx$valorpormilisegundo.$t.replace(",",".")),    
@@ -55,7 +57,7 @@ function ViewModel()
                     Titulo              : entry.gsx$titulo.$t,
                     Class               : entry.gsx$class.$t,   
                     Unidad              : entry.gsx$unidad.$t,
-                    Fuente              : entry.gsx$fuente.$t
+                    Fuente              : fuente
                 };
     };
     

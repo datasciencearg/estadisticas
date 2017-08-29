@@ -31,7 +31,12 @@
                                     <span class="badge" data-bind="text: Unidad + ' ' + Valor()"></span>
                                 </button>
                                 <br/>
-                                <a class="fuente" target="_blank" data-bind="attr: { href: Fuente }">Fuente</a>
+                                <span class="fuente">
+                                    <span>Fuente:</span>
+                                    <a class="fuente" target="_blank" data-bind="attr: { href: Fuente.Url }">
+                                        <span data-bind="text: Fuente.Titulo"></span>
+                                    </a>
+                                </span>
                             </div>
                         <!-- /ko -->
                     </div>

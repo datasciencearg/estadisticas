@@ -1,8 +1,8 @@
 .container.remove-left-margin{
-    margin-left: auto;
+    margin-left: 0px;
 }
 
-a.fuente{
+span.fuente{
     font-weight: bold;
     font-size: 10px;
 }
