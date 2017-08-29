@@ -70,6 +70,12 @@ function ViewModel()
     });
     
     self.enlaceGoogleDrive = "https://docs.google.com/spreadsheets/d/" + idPlanillaGoogleDrive + "/edit?usp=drive_web";
+    
+    self.losDatosFueronCargados = ko.pureComputed(function()
+    {
+        return self.valoresAMostrar().length > 0;
+    });
+    
     return self;
 }
 
